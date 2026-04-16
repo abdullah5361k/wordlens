@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WordLens PDF Viewer</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <div id="toolbar">
+    <div class="toolbar-left">
+      <span class="brand">WordLens</span>
+      <span class="divider">|</span>
+      <span id="pdf-title" class="pdf-title">Loading...</span>
+    </div>
+    <div class="toolbar-center">
+      <span id="page-indicator">— / —</span>
+    </div>
+    <div class="toolbar-right">
+      <button id="zoom-out" title="Zoom out">−</button>
+      <span id="zoom-level">150%</span>
+      <button id="zoom-in" title="Zoom in">+</button>
+    </div>
+  </div>
+
+  <div id="viewer-container">
+    <div id="loading-screen">
+      <div class="spinner"></div>
+      <p>Loading PDF...</p>
+    </div>
+    <div id="error-screen" class="hidden">
+      <p id="error-message"></p>
+    </div>
+    <div id="pages-container"></div>
+  </div>
+
+  <script src="pdfjs/pdf.min.js"></script>
+  <script src="viewer.js"></script>
+  <script src="content.js"></script>
+</body>
+</html>
