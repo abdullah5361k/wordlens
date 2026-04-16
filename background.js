@@ -1,5 +1,6 @@
-// Add your Groq API key here — get one free at https://console.groq.com
-const GROQ_API_KEY = 'YOUR_GROQ_API_KEY';
+// config.js is generated from .env by running: node build.js
+importScripts('config.js');
+const GROQ_API_KEY = WORDLENS_CONFIG.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // ─── PDF Interception ─────────────────────────────────────────────────────────
