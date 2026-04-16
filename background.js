@@ -4,9 +4,10 @@ const GROQ_API_KEY = WORDLENS_CONFIG.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // ─── PDF Interception ─────────────────────────────────────────────────────────
-// On install/update, register a dynamic rule that redirects .pdf URLs to our viewer
+// Register the redirect rule every time the service worker starts (not just on
+// install) so reloading the extension in chrome://extensions keeps it active.
 
-chrome.runtime.onInstalled.addListener(async () => {
+async function registerPdfRedirectRule() {
   const viewerBase = chrome.runtime.getURL('viewer.html');
 
   await chrome.declarativeNetRequest.updateDynamicRules({
@@ -29,7 +30,9 @@ chrome.runtime.onInstalled.addListener(async () => {
       },
     ],
   });
-});
+}
+
+registerPdfRedirectRule();
 
 // ─── Word Definition ──────────────────────────────────────────────────────────
 

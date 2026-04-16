@@ -44,10 +44,30 @@ function getSurroundingContext(selection) {
     const node = range.startContainer;
     if (node.nodeType !== Node.TEXT_NODE) return '';
 
-    const text = node.textContent || '';
-    const start = Math.max(0, range.startOffset - 120);
-    const end = Math.min(text.length, range.endOffset + 120);
-    return text.slice(start, end).trim();
+    const nodeText = node.textContent || '';
+
+    // For regular webpages: the text node is large enough on its own
+    if (nodeText.length > 60) {
+      const start = Math.max(0, range.startOffset - 120);
+      const end = Math.min(nodeText.length, range.endOffset + 120);
+      return nodeText.slice(start, end).trim();
+    }
+
+    // For PDF text layers: text is split across many small <span> elements.
+    // Walk sibling spans within the same parent (textLayer div) to gather context.
+    const parent = node.parentElement?.parentElement; // textLayer div
+    if (!parent) return nodeText;
+
+    const spans = Array.from(parent.querySelectorAll('span'));
+    const texts = spans.map((s) => s.textContent || '').join(' ');
+    const selectedText = selection.toString().trim();
+    const idx = texts.indexOf(selectedText);
+
+    if (idx === -1) return texts.slice(0, 200).trim();
+
+    const start = Math.max(0, idx - 120);
+    const end = Math.min(texts.length, idx + selectedText.length + 120);
+    return texts.slice(start, end).trim();
   } catch {
     return '';
   }
