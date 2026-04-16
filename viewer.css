@@ -168,6 +168,8 @@ html, body {
 
 .page-wrapper canvas {
   display: block;
+  /* Canvas must not capture mouse events — text layer sits on top and handles selection */
+  pointer-events: none;
 }
 
 /* ── PDF.js Text Layer ───────────────────────────────────────────────────── */
@@ -178,7 +180,11 @@ html, body {
   left: 0;
   overflow: hidden;
   line-height: 1;
-  pointer-events: auto;
+  /* Must sit above the canvas */
+  z-index: 2;
+  /* Prevent OS/browser font scaling from shifting span positions */
+  text-size-adjust: none;
+  -webkit-text-size-adjust: none;
 }
 
 .textLayer span,
@@ -188,6 +194,9 @@ html, body {
   white-space: pre;
   cursor: text;
   transform-origin: 0% 0%;
+  /* Explicitly allow text selection */
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .textLayer ::selection {

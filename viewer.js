@@ -108,7 +108,7 @@ async function renderPage(page, wrapper) {
   // Render canvas
   await page.render({ canvasContext: ctx, viewport }).promise;
 
-  // Render text layer
+  // Render text layer — handle both old API (.promise) and new API (.render())
   const textContent = await page.getTextContent();
   const renderTask = pdfjsLib.renderTextLayer({
     textContentSource: textContent,
@@ -117,8 +117,12 @@ async function renderPage(page, wrapper) {
     textDivs: [],
   });
 
-  if (renderTask && renderTask.promise) {
-    await renderTask.promise;
+  if (renderTask) {
+    if (typeof renderTask.render === 'function') {
+      await renderTask.render();            // PDF.js 3.4+ API
+    } else if (renderTask.promise) {
+      await renderTask.promise;             // older API
+    }
   }
 }
 
