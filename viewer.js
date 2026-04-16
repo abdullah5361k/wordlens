@@ -108,6 +108,9 @@ async function renderPage(page, wrapper) {
   // Render canvas
   await page.render({ canvasContext: ctx, viewport }).promise;
 
+  // PDF.js 3.11+ requires --scale-factor on the container
+  textLayerDiv.style.setProperty('--scale-factor', viewport.scale);
+
   // Render text layer — handle both old API (.promise) and new API (.render())
   const textContent = await page.getTextContent();
   const renderTask = pdfjsLib.renderTextLayer({
